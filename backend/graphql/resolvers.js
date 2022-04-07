@@ -11,6 +11,18 @@ const resolvers = {
       }
     },
   },
+  Mutation: {
+    saveUser: async (_, args, context, info) => {
+      try {
+        const user = await User.create({
+          ...args,
+        });
+        return user;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
 };
 
 module.exports = resolvers;
