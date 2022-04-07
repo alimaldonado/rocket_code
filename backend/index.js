@@ -1,6 +1,16 @@
-import { ApolloServer } from "apollo-server";
-import { typeDefs } from "./graphql/typeDefs.js";
-import { resolvers } from "./graphql/resolvers.js";
+const { ApolloServer } = require("apollo-server");
+const typeDefs = require("./graphql/typeDefs.js");
+const resolvers = require("./graphql/resolvers.js");
+const { sequelize } = require("./models");
+
+async function connectDB() {
+  try {
+    await sequelize.authenticate();
+    console.log("Database Connected!");
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 async function startServer() {
   const server = new ApolloServer({
@@ -10,6 +20,8 @@ async function startServer() {
 
   const { url } = await server.listen();
   console.log("Server running at: ", url);
+
+  connectDB();
 }
 
 startServer();

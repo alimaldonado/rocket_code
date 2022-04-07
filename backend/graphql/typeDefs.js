@@ -1,11 +1,16 @@
-export const typeDefs = `
+const typeDefs = `
     type User {
-        name: String!
-        middleName: String!
+        firstName: String!
+        middleName: String
         lastName: String!
         lastLastName: String
+        birthDate: String
+        email: String!
+        phone: String!
     }
     type Query {
-        hello: String
+        getUsers: [User]!
     }
 `;
+
+module.exports = typeDefs;
