@@ -14,7 +14,7 @@ const ChatMessage = ({ children }) => {
             height: "50px",
           }}
           src="https://source.unsplash.com/random"
-          class="img-thumbnail rounded-circle"
+          className="img-thumbnail rounded-circle"
           alt="avatar"
         />
       </Col>

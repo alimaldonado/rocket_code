@@ -3,7 +3,6 @@ import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import ChatForms from "../ChatForms/ChatForms";
-import ChatMessage from "../ChatMessage/ChatMessage";
 
 const ChatCard = () => {
   return (
@@ -12,7 +11,7 @@ const ChatCard = () => {
         <Card.Title>Titulo del formulario</Card.Title>
         <Card.Subtitle>
           <span>
-            <i class="fa-solid fa-clock"></i>
+            <i className="fa-solid fa-clock"></i>
           </span>{" "}
           En menos de cinco minutos
         </Card.Subtitle>

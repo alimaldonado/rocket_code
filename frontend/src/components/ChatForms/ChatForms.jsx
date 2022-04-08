@@ -1,9 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ChatMessage from "../ChatMessage/ChatMessage";
 import FormControl from "react-bootstrap/FormControl";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import validation from "../../utils/validation";
+import { gql, useMutation } from "@apollo/client";
+
+const REGISTER_QUERY = gql`
+  mutation saveUser(
+    $firstName: String!
+    $middleName: String
+    $lastName: String!
+    $lastLastName: String
+    $email: String!
+    $phone: String!
+    $birthDate: String
+  ) {
+    saveUser(
+      firstName: $firstName
+      lastName: $lastName
+      email: $email
+      phone: $phone
+      birthDate: $birthDate
+      middleName: $middleName
+      lastLastName: $lastLastName
+    ) {
+      firstName
+      lastName
+    }
+  }
+`;
 
 const ChatForms = () => {
   const [form, setForm] = useState({
@@ -20,6 +46,8 @@ const ChatForms = () => {
 
   const [activeStep, setActiveStep] = useState(1);
   const [errors, setErrors] = React.useState({});
+  const [submitMessage, setSubmitMessage] = useState(null);
+  const [submitError, setSubmitError] = useState(null);
 
   const handleNextStep = () => {
     if (activeStep > formMessages.length) return; // when there's no more steps
@@ -40,6 +68,28 @@ const ChatForms = () => {
   const handleInputChange = (label, value) => {
     validateInput(label, value);
     setForm((form) => ({ ...form, [label]: value }));
+  };
+
+  const [saveUser, { loading, data, error }] = useMutation(REGISTER_QUERY, {
+    update(_, res) {
+      const userData = res?.data?.saveUser;
+      setSubmitMessage(
+        `Bienvenido ${userData?.firstName} ${userData?.lastName}`
+      );
+    },
+    onError(error) {
+      setSubmitError(error.message);
+    },
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    saveUser({
+      variables: {
+        ...form,
+        birthDate: `${form.year}-${form.month}-${form.day}`,
+      },
+    });
   };
 
   const formMessages = [
@@ -174,7 +224,7 @@ const ChatForms = () => {
 
   return (
     <>
-      <form>
+      <form onSubmit={handleSubmit}>
         {formMessages
           .filter((m) => m.step <= activeStep)
           .map((m) => (
@@ -198,10 +248,15 @@ const ChatForms = () => {
               Nombre:{" "}
               {`${form.firstName} ${form.middleName} ${form.lastName} ${form.lastLastName}`}{" "}
             </p>
-            <Button type="submit">continuar</Button>
+            <Button type="submit">Iniciar</Button>
           </ChatMessage>
         ) : null}
       </form>
+
+      {submitMessage ? <ChatMessage>{submitMessage}</ChatMessage> : null}
+      {submitError ? (
+        <ChatMessage>Error inesperado: {submitError} </ChatMessage>
+      ) : null}
     </>
   );
 };
