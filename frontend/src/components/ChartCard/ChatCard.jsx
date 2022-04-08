@@ -2,7 +2,7 @@ import React from "react";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-
+import ChatForms from "../ChatForms/ChatForms";
 import ChatMessage from "../ChatMessage/ChatMessage";
 
 const ChatCard = () => {
@@ -19,11 +19,7 @@ const ChatCard = () => {
         <>
           <Container>
             <Row>
-              
-                <ChatMessage/>
-                <ChatMessage/>
-                <ChatMessage/>
-                <ChatMessage/>
+              <ChatForms />
             </Row>
           </Container>
         </>
